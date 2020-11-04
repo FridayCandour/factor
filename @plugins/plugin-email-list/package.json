@@ -1,8 +1,8 @@
 {
   "name": "@factor/plugin-email-list",
   "description": "Plugin to collect email addresses for invite list, launch list or newsletter.",
-  "version": "1.8.11",
-  "license": "GPL-2.0",
+  "version": "3.0.0",
+  "license": "MIT",
   "author": {
     "name": "Fiction",
     "email": "factor@fiction.com",
