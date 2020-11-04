@@ -73,7 +73,9 @@ export const getFilters = (
   // Allow for filter control using global in special cases
   // This allows special builds and multi-builds to control how filters are applied
   if (controllers && controllers[hook]) {
-    const controllerCbs = Object.values(controllers[hook]).map((_) => _.callback)
+    const controllerCbs = Object.values(controllers[hook]).map(
+      (_) => _.callback,
+    )
     for (const controller of controllerCbs) {
       const result = controller(hooks, ...rest)
       if (typeof result !== "undefined") {
@@ -125,7 +127,11 @@ export const getFilterCount = (hook: string): number => {
  * @param data - data to pass through the filters or callbacks
  * @param rest - additional arguments
  */
-export const applyFilters = <U>(hook: string, data: U, ...rest: any[]): typeof data => {
+export const applyFilters = <U>(
+  hook: string,
+  data: U,
+  ...rest: any[]
+): typeof data => {
   const _added = getFilters(hook, ...rest) // Get Filters Added
 
   const filterKeys = Object.keys(_added)
@@ -168,7 +174,8 @@ export const addFilter = (options: FilterItem): void => {
   const rest = omit(options, ["callback"])
 
   // For simpler assignments where no callback is needed
-  callback = typeof callback != "function" ? (): typeof callback => callback : callback
+  callback =
+    typeof callback != "function" ? (): typeof callback => callback : callback
 
   setFilter({ ...rest, callback })
 
@@ -266,43 +273,4 @@ const callerKey = (): string => {
   }
 
   return stacker
-}
-
-/**
- * Create a unique identifier based on a provided string, object or function
- *
- * @param object - a string, object, array or function to be converted to hash
- * @returns {string} - a hash ID for provided item
- */
-export const uniqueObjectHash = (obj: any): string => {
-  if (!obj) return obj
-
-  let str
-  if (typeof obj == "string") {
-    str = obj
-  } else if (typeof obj == "function") {
-    str = obj.toString()
-  } else {
-    // Make sure to remove circular refs
-    // https://github.com/WebReflection/flatted#flatted
-    const { stringify } = require("flatted/cjs")
-    str = stringify(obj)
-  }
-
-  if (!str.includes("\n")) {
-    str = str + callerKey()
-  }
-
-  str = str.slice(0, 500)
-
-  const keyed = str
-    .split("")
-    // eslint-disable-next-line unicorn/no-reduce
-    .reduce(
-      (prevHash: number, currVal: string) =>
-        ((prevHash << 5) - prevHash + currVal.charCodeAt(0)) | 0,
-      0
-    )
-
-  return String(keyed).replace(/-/g, "")
 }

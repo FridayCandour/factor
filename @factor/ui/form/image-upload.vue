@@ -16,7 +16,11 @@
             >
               <div class="status-bar">
                 <div
-                  v-if="['progress', 'preprocess', 'processing'].includes(img.status)"
+                  v-if="
+                    ['progress', 'preprocess', 'processing'].includes(
+                      img.status,
+                    )
+                  "
                   class="image-status overlay"
                   :class="img.status"
                 >
@@ -64,12 +68,26 @@
         </div>
       </div>
     </div>
-    <input ref="copyInput" v-model="copyText" type="text" class="invisible-copy" />
-    <factor-lightbox :visible.sync="lightboxShow" :images="populated" :selected="lightboxIndex" />
+    <input
+      ref="copyInput"
+      v-model="copyText"
+      type="text"
+      class="invisible-copy"
+    />
+    <factor-lightbox
+      :visible.sync="lightboxShow"
+      :images="populated"
+      :selected="lightboxIndex"
+    />
   </div>
 </template>
 <script lang="ts">
-import { factorMenu, factorSpinner, factorIcon, factorLightbox } from "@factor/ui"
+import {
+  factorMenu,
+  factorSpinner,
+  factorIcon,
+  factorLightbox,
+} from "@factor/ui"
 import { HTMLInputEvent } from "@factor/ui/event-types"
 import { uploadImage, requestDeleteImage } from "@factor/attachment"
 import DOM from "jquery"
@@ -137,17 +155,20 @@ export default {
           this.callback = callback
           this.triggerUpload()
         }
-      }
+      },
     )
 
     /**
      * Allow external to inject an image to this input by _id
      */
-    onEvent("addImageToInput", ({ selector, _id }: { selector: string; _id: string }) => {
-      if (selector == this.selector) {
-        this.imageIds.push(_id)
-      }
-    })
+    onEvent(
+      "addImageToInput",
+      ({ selector, _id }: { selector: string; _id: string }) => {
+        if (selector == this.selector) {
+          this.imageIds.push(_id)
+        }
+      },
+    )
 
     this.$watch(
       `value`,
@@ -156,7 +177,7 @@ export default {
           this.imageIds = typeof v == "string" ? [v] : v
         }
       },
-      { deep: true, immediate: true }
+      { deep: true, immediate: true },
     )
 
     this.dom()
@@ -174,11 +195,15 @@ export default {
     action(this: any, _id: string, action: string) {
       if (action == "view") {
         this.lightboxShow = true
-        this.lightboxIndex = this.populated.findIndex((_: Attachment) => _._id == _id)
+        this.lightboxIndex = this.populated.findIndex(
+          (_: Attachment) => _._id == _id,
+        )
       } else if (action == "copy-URL") {
         this.copyUrl(_id)
       } else if (action == "delete") {
-        const result = confirm("Are you sure? This will permanently delete this image.")
+        const result = confirm(
+          "Are you sure? This will permanently delete this image.",
+        )
         if (result) this.removeImage(_id)
       } else if (action == "upload-image") {
         this.triggerUpload()
@@ -194,7 +219,9 @@ export default {
         return
       }
 
-      this.copyText = image.url.includes("base64") ? `{{${_id}.url}}` : image.url
+      this.copyText = image.url.includes("base64")
+        ? `{{${_id}.url}}`
+        : image.url
 
       this.$nextTick(() => {
         this.$refs.copyInput.select()
@@ -345,7 +372,7 @@ export default {
         file,
         onFinished,
         item,
-      }: { item: any; file: File; index: number; onFinished: () => void }
+      }: { item: any; file: File; index: number; onFinished: () => void },
     ) {
       this.$emit("upload", { file, item })
 
@@ -398,7 +425,11 @@ export default {
       }
     },
 
-    removeFromArrayById(this: any, _id: string, theArray: Attachment[] | string[]) {
+    removeFromArrayById(
+      this: any,
+      _id: string,
+      theArray: Attachment[] | string[],
+    ) {
       const index = theArray.findIndex((_: Attachment | string) => {
         if (typeof _ == "string") {
           return _ == _id

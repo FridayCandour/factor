@@ -7,16 +7,7 @@
     "url": "git+https://github.com/fiction-com/factor.git"
   },
   "workspaces": [
-    "@apps/*",
-    "@examples/*",
-    "@plugins/*",
-    "@themes/*",
-    "@examples/*",
-    "@factor/*",
-    "@demo/*",
-    "**/fixtures/*",
-    "test/builds/*",
-    "test/modules/*"
+    "@packages/*"
   ],
   "private": true,
   "license": "MIT",
@@ -54,8 +45,6 @@
     "@typescript-eslint/parser": "^4.0.0",
     "eslint": "^7.0.0",
     "eslint-config-prettier": "^6.4.0",
-    "eslint-import-resolver-alias": "^1.1.2",
-    "eslint-loader": "^4.0.0",
     "eslint-plugin-html": "^6.0.0",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-jest": "^24.0.0",

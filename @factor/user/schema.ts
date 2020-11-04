@@ -13,7 +13,7 @@ export const schemaMiddleware = (userSchema: Schema): void => {
    * Password Verification and Handling
    */
   userSchema.methods.comparePassword = async function comparePassword(
-    candidate: string
+    candidate: string,
   ): Promise<boolean> {
     return bcrypt.compare(candidate, this.password)
   }
@@ -23,7 +23,7 @@ export const schemaMiddleware = (userSchema: Schema): void => {
    */
   userSchema.pre("save", async function (
     this: FactorUser & Document,
-    next: HookNextFunction
+    next: HookNextFunction,
   ) {
     if (!this.isModified("password") || !this.password) {
       return next()
@@ -40,7 +40,10 @@ export const schemaMiddleware = (userSchema: Schema): void => {
   /**
    * Set permalink to @[username] to users can have their own url
    */
-  userSchema.pre("save", function (this: FactorUser & Document, next: HookNextFunction) {
+  userSchema.pre("save", function (
+    this: FactorUser & Document,
+    next: HookNextFunction,
+  ) {
     if (this.displayName) {
       this.title = this.displayName
     }

@@ -31,8 +31,6 @@
     "deepmerge": "^4.1.1",
     "detect-node": "^2.0.4",
     "dotenv": "^8.2.0",
-    "find-node-modules": "^2.0.0",
-    "flatted": "^3.0.0",
     "front-matter": "^4.0.0",
     "jquery": "^3.5.0",
     "lodash-es": "^4.17.15",
@@ -45,12 +43,10 @@
     "rand-token": "^1.0.0",
     "remark": "^13.0.0",
     "sanitize-html": "^2.0.0",
-    "sitemap": "^6.1.0",
     "stopwords": "^0.0.9",
     "strip-markdown": "^4.0.0",
     "uniqid": "^5.0.3",
-    "validator": "^13.0.0",
-    "vue": "^2.6.11"
+    "validator": "^13.0.0"
   },
   "gitHead": "b257411e1c6c32b52b444cc6f1518bf1bee1e480"
 }

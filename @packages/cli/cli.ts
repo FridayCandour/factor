@@ -1,7 +1,4 @@
 /* eslint-disable unicorn/no-process-exit */
-import { buildProduction } from "@factor/build/webpack-config"
-
-import { generateLoaders } from "@factor/cli/extension-loader"
 import * as tools from "@factor/api"
 import commander from "commander"
 import log from "@factor/api/logger"
@@ -16,6 +13,7 @@ import { CommandOptions } from "./types"
 import pkg from "./package.json"
 import LoadingBar from "./loading"
 import { logSetupNeeded } from "./setup"
+
 interface CommanderArguments {
   options: Record<string, any>[]
   parent: Record<string, any>
@@ -100,27 +98,6 @@ export const runCommand = async (options: CommandOptions): Promise<void> => {
     await bar.update({ percent: 12, msg: "setting up" })
 
     /**
-     * Make sure all package dependencies are installed and updated
-     */
-    if (install && !skipVerifyDeps) {
-      await bar.update({
-        percent: 25,
-        msg: `checking dependencies with ${getCliExecutor()}`,
-      })
-
-      const verifyDepProcess = execa(getCliExecutor(), ["install"])
-      await verifyDepProcess
-
-      await bar.update({ percent: 55, msg: "generating files" })
-      try {
-        generateLoaders(setup)
-      } catch (error) {
-        bar.stop()
-        log.error(error)
-      }
-    }
-
-    /**
      * Extend and setup Node server environment
      */
 
@@ -148,7 +125,7 @@ export const runCommand = async (options: CommandOptions): Promise<void> => {
 
   try {
     if (command && ["build", "start"].includes(command)) {
-      await buildProduction(setup)
+      // await buildProduction(setup)
     } else if (command == "setup") {
       await tools.runCallbacks(`cli-setup`, setup)
     } else if (command == "run") {
@@ -178,7 +155,9 @@ export const runCommand = async (options: CommandOptions): Promise<void> => {
  * @library commander
  * @param commanderArguments - arguments provided by commander lib
  */
-const cleanArguments = (commanderArguments: CommanderArguments): Record<string, any> => {
+const cleanArguments = (
+  commanderArguments: CommanderArguments,
+): Record<string, any> => {
   const out: { [index: string]: any } = {}
 
   const { parent = {}, program = {}, ...rest } = commanderArguments
@@ -227,10 +206,13 @@ export const execute = (): void => {
   commander
     .command("dev")
     .description("Start development server")
-    .option("--static-files", "use static file system for builds instead of memory")
+    .option(
+      "--static-files",
+      "use static file system for builds instead of memory",
+    )
     .option(
       "--watch-server",
-      "server development mode - restart the server on file changes"
+      "server development mode - restart the server on file changes",
     )
     .option("--skip-verify-deps", "Skip dependency check")
     .action((_arguments) => {
@@ -245,7 +227,7 @@ export const execute = (): void => {
     .command("start")
     .description("Build and then serve production app.")
     .action((_arguments) =>
-      runCommand({ command: "start", ...cleanArguments(_arguments) })
+      runCommand({ command: "start", ...cleanArguments(_arguments) }),
     )
 
   commander
@@ -257,7 +239,7 @@ export const execute = (): void => {
         ...cleanArguments(_arguments),
         install: false,
         NODE_ENV,
-      })
+      }),
     )
 
   commander
@@ -266,7 +248,7 @@ export const execute = (): void => {
     .option("--speed", "Output build speed data")
     .description("Build production app")
     .action((_arguments) =>
-      runCommand({ command: "build", ...cleanArguments(_arguments) })
+      runCommand({ command: "build", ...cleanArguments(_arguments) }),
     )
 
   commander
@@ -278,7 +260,7 @@ export const execute = (): void => {
         filter,
         clean: false,
         ...cleanArguments(_arguments),
-      })
+      }),
     )
 
   commander
@@ -290,7 +272,7 @@ export const execute = (): void => {
         filter,
         install: false,
         ...cleanArguments(_arguments),
-      })
+      }),
     )
 
   commander
