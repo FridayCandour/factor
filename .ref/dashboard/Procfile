@@ -1,1 +1,0 @@
-web: yarn workspace @darwin_/dashboard factor serve

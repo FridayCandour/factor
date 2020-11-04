@@ -1,3 +1,0 @@
-### Please describe your change...
-
-_(Bugfix, Feature, Style, Refactor, Build or Other)_

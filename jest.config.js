@@ -1,57 +1,33 @@
 module.exports = {
-  testEnvironment: "node",
-
-  expand: true,
-
-  forceExit: true,
-
-  roots: ["<rootDir>/@factor", "<rootDir>/test"],
-
-  setupFilesAfterEnv: ["./test/config/setup.ts"],
-
-  testMatch: ["**/?(*.|*-)+(spec|test).[jt]s?(x)"],
-  testPathIgnorePatterns: [
-    "node_modules/(?!(@factor|factor))",
-    "test/fixtures/.*/.*?/",
-    "examples/.*",
-  ],
-
-  watchPathIgnorePatterns: ["dist/.*", ".factor/.*"],
-
-  moduleNameMapper: {
-    "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$":
-      "<rootDir>/test/config/mock-file",
-    "\\.(css|less)$": "<rootDir>/test/config/mock-style",
-    "__FIND__(.*).(js|vue|ts)$": "<rootDir>/@factor/app/$1",
-    "__CWD__/(.*)$": "<rootDir>/test/modules/alias/$1",
-    "__SRC__/(.*)$": "<rootDir>/test/modules/alias/$1",
-  },
-
-  transformIgnorePatterns: ["node_modules/(?!(@factor|factor|lodash-es))"],
-
   transform: {
-    "^.+\\.ts$": "ts-jest",
-    "^.+\\.js$": "babel-jest",
-    "^.+\\.vue$": "vue-jest",
+    ".ts": "ts-jest",
   },
 
   globals: {
     "ts-jest": {
-      tsConfig: {
-        strict: false,
-        checkJs: false,
-      },
+      diagnostics: true,
       isolatedModules: true,
     },
   },
 
-  moduleFileExtensions: ["js", "ts", "json", "vue"],
+  moduleFileExtensions: ["ts", "js"],
 
-  coverageDirectory: "./coverage",
+  testMatch: ["<rootDir>/@packages/**/**.spec.ts", "<rootDir>/test/**/*.spec.ts"],
+  testPathIgnorePatterns: ["/node_modules/", "/dist/", "/cdk.out/", "/docker/"],
+  coveragePathIgnorePatterns: ["node_modules"],
 
-  collectCoverageFrom: ["**/@factor/**/*.[jt]s"],
+  collectCoverage: Boolean(process.env.COVERAGE),
+  collectCoverageFrom: ["<rootDir>/@packages/**/*.ts"],
 
-  coveragePathIgnorePatterns: ["node_modules/(?!(@factor|factor))", "fixtures", "dist"],
+  setupFilesAfterEnv: ["./test/jest-setup.ts"],
+  moduleNameMapper: {
+    // map lodash-es to lodash in test since jest does not support esm yet
+    "^lodash-es$": "lodash",
+  },
 
-  reporters: ["default", ["jest-junit", { outputDirectory: "reports/junit" }]],
+  setupFiles: [
+    // mock native browser els
+    "jest-canvas-mock",
+    "jest-localstorage-mock",
+  ],
 }
