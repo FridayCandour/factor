@@ -5,8 +5,6 @@ module.exports = {
     require: false,
     module: false,
     process: false,
-    cy: false,
-    Cypress: false,
     to: false,
     describe: false,
     context: false,
@@ -22,11 +20,10 @@ module.exports = {
     es6: true,
     node: true,
     "jest/globals": true,
-    "cypress/globals": true,
   },
 
   extends: [
-    "plugin:vue/recommended",
+    "plugin:vue/vue3-recommended",
     "plugin:unicorn/recommended",
     "plugin:jest/recommended",
     "eslint:recommended",
@@ -34,7 +31,6 @@ module.exports = {
     "plugin:import/warnings",
     "plugin:import/typescript",
     "plugin:@typescript-eslint/recommended",
-    "plugin:cypress/recommended",
   ],
 
   plugins: [
@@ -45,7 +41,6 @@ module.exports = {
     "import",
     "jest",
     "@typescript-eslint",
-    "cypress",
   ],
 
   rules: {
@@ -73,22 +68,22 @@ module.exports = {
     "unicorn/no-null": "off",
     "unicorn/no-fn-reference-in-iterator": "off",
     "unicorn/no-useless-undefined": "off",
-    "vue/html-self-closing": [
-      "error",
-      {
-        html: {
-          void: "always",
-          normal: "always",
-          component: "always",
-        },
-        svg: "always",
-        math: "always",
-      },
-    ],
-    "vue/html-closing-bracket-spacing": "off",
-    "vue/multiline-html-element-content-newline": "off",
-    "vue/singleline-html-element-content-newline": "off",
-    "vue/max-attributes-per-line": [2, { singleline: 20, multiline: {} }],
+    // "vue/html-self-closing": [
+    //   "error",
+    //   {
+    //     html: {
+    //       void: "always",
+    //       normal: "always",
+    //       component: "always",
+    //     },
+    //     svg: "always",
+    //     math: "always",
+    //   },
+    // ],
+    // "vue/html-closing-bracket-spacing": "off",
+    // "vue/multiline-html-element-content-newline": "off",
+    // "vue/singleline-html-element-content-newline": "off",
+    // "vue/max-attributes-per-line": [2, { singleline: 20, multiline: {} }],
     "jest/expect-expect": "off", // annoying
     "@typescript-eslint/explicit-module-boundary-types": "off", // come back to this later (2000 errors)
     "@typescript-eslint/explicit-function-return-type": "off", // overridden for .ts files

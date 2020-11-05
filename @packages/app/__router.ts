@@ -1,13 +1,8 @@
 import { applyFilters, runCallbacks, addFilter } from "@factor/api/hooks"
 import { emitEvent } from "@factor/api/events"
 
-import VueRouter, {
-  RouteConfig,
-  Route,
-  RouterOptions,
-  Location,
-  NavigationGuardNext,
-} from "vue-router"
+import { createRouter, createWebHistory, createMemoryHistory } from "vue-router"
+
 import qs from "qs"
 import { uniq } from "@factor/api"
 
@@ -28,7 +23,7 @@ let __routerInstance: VueRouter
 const hookClientRouterBefore = async (
   to: Route,
   from: Route,
-  next: NavigationGuardNext
+  next: NavigationGuardNext,
 ): Promise<void> => {
   if (__initialPageLoad || to.path == from.path) {
     next()
@@ -70,7 +65,10 @@ const hookClientRouterAfter = (to: Route, from: Route): void => {
 /**
  * Pull routes for sitemap out of a router config
  */
-export const getRouterPaths = (routes: RouteConfig[], parent = ""): string[] => {
+export const getRouterPaths = (
+  routes: RouteConfig[],
+  parent = "",
+): string[] => {
   let out: string[] = []
 
   routes
@@ -103,9 +101,11 @@ export const getRouterPaths = (routes: RouteConfig[], parent = ""): string[] => 
 export const getKnownRoutePaths = (): string[] => {
   const contentRoutes = applyFilters("content-routes", [])
 
-  const theRoutes = uniq(getRouterPaths(contentRoutes)).filter((fullPath: string) => {
-    return !fullPath.includes(":")
-  })
+  const theRoutes = uniq(getRouterPaths(contentRoutes)).filter(
+    (fullPath: string) => {
+      return !fullPath.includes(":")
+    },
+  )
 
   return theRoutes
 }
@@ -115,7 +115,9 @@ export const getKnownRoutePaths = (): string[] => {
  * @library vue-router
  */
 export const createFactorRouter = (): VueRouter => {
-  const routes: RouteConfig[] = applyFilters("routes", []).filter((_: RouteConfig) => _)
+  const routes: RouteConfig[] = applyFilters("routes", []).filter(
+    (_: RouteConfig) => _,
+  )
 
   const router = new VueRouter({
     mode: "history",
@@ -133,7 +135,8 @@ export const createFactorRouter = (): VueRouter => {
       }
     },
     parseQuery: (query) => qs.parse(query),
-    stringifyQuery: (query) => (qs.stringify(query) ? `?${qs.stringify(query)}` : ""),
+    stringifyQuery: (query) =>
+      qs.stringify(query) ? `?${qs.stringify(query)}` : "",
   } as RouterOptions)
 
   /**
@@ -141,7 +144,9 @@ export const createFactorRouter = (): VueRouter => {
    * Don't run on server as this causes the hooks to run twice
    */
   if (process.env.FACTOR_BUILD_ENV == "client") {
-    router.beforeEach((to, from, next) => hookClientRouterBefore(to, from, next))
+    router.beforeEach((to, from, next) =>
+      hookClientRouterBefore(to, from, next),
+    )
     router.afterEach((to, from) => hookClientRouterAfter(to, from))
   }
 
@@ -226,7 +231,7 @@ export const addContentRoutes = ({
  */
 const eachRoute = (
   routes: RouteConfig[],
-  cb: (r: RouteConfig) => RouteConfig | undefined
+  cb: (r: RouteConfig) => RouteConfig | undefined,
 ): RouteConfig[] => {
   const newRoutes: RouteConfig[] = []
   routes.forEach((rr: RouteConfig) => {
@@ -262,7 +267,9 @@ export const editContentRoute = ({
     hook: "content-routes",
     key: `edit-${path}`,
     callback: (allRoutes: RouteConfig[]): RouteConfig[] => {
-      allRoutes = eachRoute(allRoutes, (r: RouteConfig): RouteConfig | undefined => {
+      allRoutes = eachRoute(allRoutes, (r: RouteConfig):
+        | RouteConfig
+        | undefined => {
         if (
           (typeof path == "object" && path.includes(r.path)) ||
           (typeof path == "string" && r.path == path)

@@ -20,7 +20,6 @@
     "**/*.log": true,
     "**/app-dist": true
   },
-  "editor.fontFamily": "Operator mono, Menlo, Monaco, 'Courier New', monospace",
 
   "eslint.options": {
     "extensions": [".js", ".vue", ""]
@@ -28,40 +27,6 @@
   "eslint.run": "onSave",
   "editor.formatOnSave": true,
 
-  "cSpell.enableFileTypes": [
-    "asciidoc",
-    "c",
-    "cpp",
-    "csharp",
-    "css",
-    "git-commit",
-    "go",
-    "handlebars",
-    "haskell",
-    "html",
-    "jade",
-    "java",
-    "javascript",
-    "javascriptreact",
-    "json",
-    "jsonc",
-    "latex",
-    "less",
-    "markdown",
-    "php",
-    "plaintext",
-    "pug",
-    "python",
-    "restructuredtext",
-    "rust",
-    "scala",
-    "scss",
-    "text",
-    "typescript",
-    "typescriptreact",
-    "yaml",
-    "yml"
-  ],
   "cSpell.words": [
     "Buildpack",
     "Commentizer",

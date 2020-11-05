@@ -1,4 +1,4 @@
-import Vue from "vue"
+import { App } from "vue"
 import { createApp } from "./app"
 import { handleContext } from "./ssr-context"
 import { ServerRenderContext } from "./types"
@@ -8,10 +8,13 @@ import { ServerRenderContext } from "./types"
  * this function is expected to return a Promise that resolves to the app instance.
  * https://ssr.vuejs.org/guide/structure.html#entry-server-js
  */
-export default async (context: ServerRenderContext): Promise<Vue> => {
-  const { vm, router, store } = await createApp({ url: context.url })
+export default async (context: ServerRenderContext): Promise<App> => {
+  const { app } = await createApp({
+    url: context.url,
+    mode: "server",
+  })
 
-  await handleContext({ context, vm, router, store })
+  //await handleContext({ context, app, router })
 
-  return vm
+  return app
 }

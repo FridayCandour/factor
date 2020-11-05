@@ -1,8 +1,5 @@
 import { applyFilters, runCallbacks } from "@factor/api/hooks"
-import Vue, { DirectiveFunction } from "vue"
-
-Vue.config.productionTip = false
-Vue.config.silent = false
+import * as Vue from "vue"
 
 let __observables = {}
 
@@ -11,7 +8,9 @@ let __observables = {}
  * Load before plugins as they will hook into these and watch them
  */
 const setupGlobalObservable = (): void => {
-  __observables = Vue.observable(applyFilters("register-global-observables", {}))
+  __observables = Vue.observable(
+    applyFilters("register-global-observables", {}),
+  )
 }
 
 /**
@@ -28,7 +27,7 @@ const addClientDirectives = (): void => {
   if (process.env.FACTOR_BUILD_ENV == "client") {
     const directives: { [key: string]: DirectiveFunction } = applyFilters(
       "client-directives",
-      {}
+      {},
     )
 
     for (const __ in directives) {
